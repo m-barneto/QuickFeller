@@ -1,0 +1,7 @@
+name: QuickFeller
+version: ${project.version}
+main: me.mattdokn.quickfeller.QuickFeller
+api-version: 1.13
+authors: [Mattdokn]
+description: Tree feller plugin without drops.
+website: https://www.youtube.com/channel/UCiwm6fobbKIUHR9EHG1EcVw
