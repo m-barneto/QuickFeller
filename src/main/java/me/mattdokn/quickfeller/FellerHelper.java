@@ -57,15 +57,15 @@ public class FellerHelper {
     }
     public static void destroyBlocks(HashMap<Block, Boolean> blocks, Player player) {
         for (HashMap.Entry<Block, Boolean> entry : blocks.entrySet()) {
-            for (ItemStack itemStack : entry.getKey().getDrops(player.getInventory().getItemInMainHand(), player)) {
+            /*for (ItemStack itemStack : entry.getKey().getDrops(player.getInventory().getItemInMainHand(), player)) {
                 HashMap <Integer,ItemStack> leftovers = player.getInventory().addItem(itemStack);
                 if (!leftovers.isEmpty()) {
                     for (HashMap.Entry<Integer, ItemStack> itemStackEntry : leftovers.entrySet()) {
                         player.getWorld().dropItem(player.getEyeLocation().add(player.getLocation().getDirection()), itemStackEntry.getValue());
                     }
                 }
-            }
-            entry.getKey().setType(Material.AIR);
+            }*/
+            entry.getKey().breakNaturally(player.getInventory().getItemInMainHand());
         }
     }
     private static List<String> logsCache = null;
