@@ -9,8 +9,5 @@
         <module name="QuickFeller" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="QuickFeller" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

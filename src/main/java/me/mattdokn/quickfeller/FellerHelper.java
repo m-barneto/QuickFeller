@@ -6,26 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class FellerHelper {
-    private static TreeType getTreeType(String materialName) {
-        switch (materialName) {
-            case "ACACIA_LOG":
-                return TreeType.ACACIA;
-            case "BIRCH_LOG":
-                return TreeType.BIRCH;
-            case "DARK_OAK_LOG":
-                return TreeType.DARK_OAK;
-            case "JUNGLE_LOG":
-                return TreeType.JUNGLE;
-            case "OAK_LOG":
-                return TreeType.OAK;
-            case "SPRUCE_LOG":
-                return TreeType.SPRUCE;
-            default:
-                return null;
-        }
-    }
     private static void getNeighbors(Block block, HashMap<Block, Boolean> blocks, HashMap<Block, Boolean> toAdd) {
         // Loop through all blocks in a 3x3x3 area around given block
         for (int z = -1; z <= 1; ++z) {
@@ -35,10 +18,10 @@ public class FellerHelper {
                     Block rel = block.getRelative(x, y, z);
 
                     // If relative block isn't same log type or a log at all then skip it
-                    TreeType relType = getTreeType(rel.getType().name());
-                    if (relType == null || relType != getTreeType(block.getType().name())) continue;
+                    boolean relType = rel.getType().name().equals(block.getType().name());
+                    if (!relType) continue;
 
-                    // If rel block isnt in hashmap add it to new log hashmap
+                    // If rel block isn't in hashmap add it to new log hashmap
                     // This prevents use from adding duplicate blocks to the hashmap
                     if (!blocks.containsKey(rel)) toAdd.put(rel, false);
                 }
@@ -76,7 +59,7 @@ public class FellerHelper {
         for (HashMap.Entry<Block, Boolean> entry : blocks.entrySet()) {
             for (ItemStack itemStack : entry.getKey().getDrops(player.getInventory().getItemInMainHand(), player)) {
                 HashMap <Integer,ItemStack> leftovers = player.getInventory().addItem(itemStack);
-                if (leftovers.size() > 0) {
+                if (!leftovers.isEmpty()) {
                     for (HashMap.Entry<Integer, ItemStack> itemStackEntry : leftovers.entrySet()) {
                         player.getWorld().dropItem(player.getEyeLocation().add(player.getLocation().getDirection()), itemStackEntry.getValue());
                     }
@@ -84,6 +67,11 @@ public class FellerHelper {
             }
             entry.getKey().setType(Material.AIR);
         }
+    }
+    private static List<String> logsCache = null;
+    public static boolean IsTreeBlockType(Block block) {
+        if (logsCache == null) logsCache = QuickFeller.instance.getConfig().getStringList("logs");
+        return logsCache.contains(block.getType().name());
     }
 }
 
